@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <string>
+#include <chrono>
 using namespace std;
 
 class BigNumber
@@ -221,7 +222,7 @@ public:
 	}
 };
 
-void fibonnacciAccurateValues()
+void fibonnacciAccurateValues(unsigned int n)
 {
 	unsigned long long primero = 0;
 	unsigned long long segundo = 1;
@@ -229,7 +230,7 @@ void fibonnacciAccurateValues()
 	BigNumber bg1("0");
 	BigNumber bg2("0");
 	BigNumber bgResult("0");
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (i == 0)
 		{
@@ -255,15 +256,15 @@ void fibonnacciAccurateValues()
 			bg2.setNum(BigNumber::toVector(to_string(segundo)));
 			bgResult = BigNumber::sum(bg1, bg2);
 			cout << i + 1 << ". " << bg1.vectorToString() << " + " << bg2.vectorToString() << " = " << bgResult.vectorToString() << endl;
-			bg1 = bg2;
-			bg2 = bgResult;
+			bg1.setNum(bg2.getNum());
+			bg2.setNum(bgResult.getNum());
 		}
 		else
 		{
 			bgResult = BigNumber::sum(bg1, bg2);
 			cout << i << ". " << bg1.vectorToString() << " + " << bg2.vectorToString() << " = " << bgResult.vectorToString() << endl;
-			bg1 = bg2;
-			bg2 = bgResult;
+			bg1.setNum(bg2.getNum());
+			bg2.setNum(bgResult.getNum());
 		}
 	}
 }
@@ -283,7 +284,12 @@ void fibonacci()
 }
 int main()
 {
-	fibonacci();
-	// fibonnacciAccurateValues();
+	// fibonacci();
+	auto start = chrono::high_resolution_clock::now();
+	fibonnacciAccurateValues(100);
+	auto finish = chrono::high_resolution_clock::now();
+	auto duration = chrono::duration_cast<chrono::milliseconds>(finish - start);
+
+	cout << duration.count() << " miliseconds" << endl;
 	return 0;
 }
